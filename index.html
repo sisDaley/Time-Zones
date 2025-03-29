@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Time Zone Converter</title>
+  <script>
+    function updateTimes() {
+      // Get the user input, e.g., "3:15 PM"
+      const inputTimeStr = document.getElementById("timeInput").value.trim();
+      if (!inputTimeStr) return;
+
+      // Split into the time part ("3:15") and the AM/PM part ("PM")
+      const [timePart, meridian] = inputTimeStr.split(" ");
+      if (!timePart || !meridian) return;
+
+      // Extract hours and minutes, converting to numbers
+      const [hoursStr, minutesStr] = timePart.split(":");
+      let hours = parseInt(hoursStr, 10);
+      const minutes = parseInt(minutesStr, 10) || 0; // default to 0 if empty
+
+      // Convert 12‑hour format to 24‑hour format
+      const meridianUpper = meridian.toUpperCase();
+      if (meridianUpper === "PM" && hours < 12) {
+        hours += 12;
+      } else if (meridianUpper === "AM" && hours === 12) {
+        hours = 0;
+      }
+
+      // For each offset row, calculate the new time
+      const offsetElements = document.getElementsByClassName("offset");
+      const outputElements = document.getElementsByClassName("outputTime");
+
+      for (let i = 0; i < offsetElements.length; i++) {
+        // Convert the offset into a number
+        const tzOffset = parseInt(offsetElements[i].textContent.trim(), 10);
+
+        // Add/subtract the offset from the base hours
+        let newHours = hours + tzOffset;
+
+        // Wrap around 24 hours
+        newHours = (newHours + 24) % 24;
+
+        // Convert back to 12‑hour format
+        const newMeridian = newHours >= 12 ? "PM" : "AM";
+        let displayHours = newHours % 12;
+        if (displayHours === 0) displayHours = 12;
+
+        // Format minutes to always be two digits
+        const displayMinutes = minutes < 10 ? "0" + minutes : minutes;
+
+        // Create final string like "11:15 AM"
+        const finalTime = displayHours + ":" + displayMinutes + " " + newMeridian;
+
+        // Display the result
+        outputElements[i].textContent = finalTime;
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <h1>Time Zone Converter</h1>
+  <p>Enter a 12-hour time (for example, 3:15 PM) and click "Convert":</p>
+  <input type="text" id="timeInput" placeholder="e.g. 3:15 PM">
+  <button onclick="updateTimes()">Convert</button>
+  <img src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-labelledby='title' aria-describedby='desc' role='img' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3EFacebook%3C/title%3E%3Cdesc%3EA line styled icon from Orion Icon Library.%3C/desc%3E%3Cpath data-name='layer1' d='M56.375 2H7.625A5.642 5.642 0 0 0 2 7.625v48.75A5.642 5.642 0 0 0 7.625 62h26.25V37.625h-6.563V28.25h6.563v-4.687c.152-5.256 1.512-9.932 10.424-10.312h7.389v9.293h-6.247a2.953 2.953 0 0 0-3.129 2.895v2.811h9.375l-1.6 9.375h-7.775V62h14.063A5.642 5.642 0 0 0 62 56.375V7.625A5.642 5.642 0 0 0 56.375 2z' fill='none' stroke='%23202020' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' stroke-linejoin='round'%3E%3C/path%3E%3C/svg%3E" alt="Facebook" width="75" height="75"/>
+  <table border="1" style="margin-top: 1em;">
+    <tr>
+      <th>Time Zone</th>
+      <th>Offset (hours)</th>
+      <th>Converted Time</th>
+    </tr>
+    <tr>
+      <td>PST</td>
+      <td class="offset">-1</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>MST</td>
+      <td class="offset">0</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>CST</td>
+      <td class="offset">+1</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>EST</td>
+      <td class="offset">+2</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>WAT / CET</td>
+      <td class="offset">+7</td>
+      <td class="outputTime"></td>
+    </tr>   <tr>
+      <td>YAKT</td>
+      <td class="offset">+3</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>COT</td>
+      <td class="offset">+1</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>AMT / CST</td>
+      <td class="offset">+2</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>BRT</td>
+      <td class="offset">+3</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>GMT</td>
+      <td class="offset">+6</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>CAT / EET</td>
+      <td class="offset">+8</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>EAT / AST</td>
+      <td class="offset">+9</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>KRAT</td>
+      <td class="offset">+13</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>ACST</td>
+      <td class="offset">+16</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>AWST</td>
+      <td class="offset">+14</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>AEDT</td>
+      <td class="offset">+17</td>
+      <td class="outputTime"></td>
+    </tr>
+    <tr>
+      <td>IST</td>
+      <td class="offset">+11.5</td>
+      <td class="outputTime"></td>
+    </tr>
+  </table>
+
+</body>
+</html>
